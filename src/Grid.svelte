@@ -2,7 +2,7 @@
 	var size: number = 4;
 	var remainingShipsToSpawn: number = Math.ceil(size);
 	var remainingShips: number = remainingShipsToSpawn;
-	var remainingPlays = Math.ceil(size * 2.5);
+	var remainingPlays: number = Math.ceil(size * 2.5);
 
 	type cell = {
 		status: "water" | "ship" | "bomb" | "miss";
