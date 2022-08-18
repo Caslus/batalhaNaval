@@ -1,25 +1,20 @@
 <script lang="ts">
 	var size: number = 4;
-	var remainingShips: number = Math.ceil(size / 2);
+	var remainingShips: number = Math.ceil(size);
+	var remainingPlays = size * 2;
 
 	type cell = "water" | "ship" | "bomb" | "miss";
 	type gridRow = cell[];
 	let grid: gridRow[] = [];
 
 	function populateGrid() {
-		for (let i = 0; i < size; i++) {
-			let row: cell[] = [];
-			for (let j = 0; j < size; j++) {
-				if (remainingShips > 0) {
-					if (Math.random() > 0.8) {
-						grid[i][j] = "ship";
-						remainingShips--;
-					}
-				}
+		while (remainingShips > 0) {
+			let x = Math.floor(Math.random() * size);
+			let y = Math.floor(Math.random() * size);
+			if (grid[x][y] == "water") {
+				grid[x][y] = "ship";
+				remainingShips--;
 			}
-		}
-		if (remainingShips > 0) {
-			populateGrid();
 		}
 	}
 
@@ -27,16 +22,6 @@
 		for (let i = 0; i < size; i++) {
 			let row: cell[] = [];
 			for (let j = 0; j < size; j++) {
-				/*if (remainingShips > 0) {
-					if (Math.random() > 0.8) {
-						row.push("ship");
-						remainingShips--;
-					} else {
-						row.push("water");
-					}
-				} else {
-					row.push("water");
-				}*/
 				row.push("water");
 			}
 			grid.push(row);
@@ -44,6 +29,18 @@
 		populateGrid();
 	}
 	generateGrid();
+
+	function play(cell: cell) {
+		if (remainingPlays > 0) {
+			if (cell == "water") {
+				cell = "miss";
+			} else {
+				cell = "bomb";
+			}
+			remainingPlays--;
+			console.log(remainingPlays);
+		}
+	}
 </script>
 
 <div class="grid">
@@ -55,7 +52,7 @@
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							on:click={() => {
-								cell = "miss";
+								play(cell);
 							}}
 						>
 							🌊
@@ -64,7 +61,7 @@
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							on:click={() => {
-								cell = "bomb";
+								play(cell);
 							}}
 						>
 							🚢
