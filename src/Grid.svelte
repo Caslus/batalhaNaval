@@ -1,6 +1,7 @@
 <script lang="ts">
 	var size: number = 4;
-	var remainingShips: number = Math.ceil(size);
+	var remainingShipsToSpawn: number = Math.ceil(size);
+	var remainingShips: number = remainingShipsToSpawn;
 	var remainingPlays = size * 2;
 
 	type cell = {
@@ -11,12 +12,12 @@
 	let grid: gridRow[] = [];
 
 	function populateGrid() {
-		while (remainingShips > 0) {
+		while (remainingShipsToSpawn > 0) {
 			let x = Math.floor(Math.random() * size);
 			let y = Math.floor(Math.random() * size);
 			if (grid[x][y].status == "water") {
 				grid[x][y].status = "ship";
-				remainingShips--;
+				remainingShipsToSpawn--;
 			}
 		}
 	}
@@ -39,6 +40,7 @@
 				grid[cell.position.x][cell.position.y].status = "miss";
 			} else {
 				grid[cell.position.x][cell.position.y].status = "bomb";
+				remainingShips--;
 			}
 			remainingPlays--;
 		}
@@ -79,5 +81,11 @@
 	{/each}
 </div>
 <div>
-	Tentativas restantes: {remainingPlays}
+	{#if remainingPlays == 0 && remainingShips > 0}
+		Você perdeu.
+	{:else if remainingShips == 0}
+		Você ganhou!
+	{:else}
+		Tentativas restantes: {remainingPlays}
+	{/if}
 </div>
