@@ -3,7 +3,10 @@
 	var remainingShips: number = Math.ceil(size);
 	var remainingPlays = size * 2;
 
-	type cell = "water" | "ship" | "bomb" | "miss";
+	type cell = {
+		status: "water" | "ship" | "bomb" | "miss";
+		position: { x: number; y: number };
+	};
 	type gridRow = cell[];
 	let grid: gridRow[] = [];
 
@@ -11,8 +14,8 @@
 		while (remainingShips > 0) {
 			let x = Math.floor(Math.random() * size);
 			let y = Math.floor(Math.random() * size);
-			if (grid[x][y] == "water") {
-				grid[x][y] = "ship";
+			if (grid[x][y].status == "water") {
+				grid[x][y].status = "ship";
 				remainingShips--;
 			}
 		}
@@ -22,7 +25,7 @@
 		for (let i = 0; i < size; i++) {
 			let row: cell[] = [];
 			for (let j = 0; j < size; j++) {
-				row.push("water");
+				row.push({ status: "water", position: { x: i, y: j } });
 			}
 			grid.push(row);
 		}
@@ -32,13 +35,12 @@
 
 	function play(cell: cell) {
 		if (remainingPlays > 0) {
-			if (cell == "water") {
-				cell = "miss";
+			if (cell.status == "water") {
+				grid[cell.position.x][cell.position.y].status = "miss";
 			} else {
-				cell = "bomb";
+				grid[cell.position.x][cell.position.y].status = "bomb";
 			}
 			remainingPlays--;
-			console.log(remainingPlays);
 		}
 	}
 </script>
@@ -48,7 +50,7 @@
 		<div class="row">
 			{#each row as cell}
 				<div class="cell">
-					{#if cell == "water"}
+					{#if cell.status == "water"}
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							on:click={() => {
@@ -57,7 +59,7 @@
 						>
 							🌊
 						</a>
-					{:else if cell == "ship"}
+					{:else if cell.status == "ship"}
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							on:click={() => {
@@ -66,13 +68,16 @@
 						>
 							🚢
 						</a>
-					{:else if cell == "bomb"}
+					{:else if cell.status == "bomb"}
 						💥
-					{:else if cell == "miss"}
+					{:else if cell.status == "miss"}
 						😭
 					{/if}
 				</div>
 			{/each}
 		</div>
 	{/each}
+</div>
+<div>
+	Tentativas restantes: {remainingPlays}
 </div>
