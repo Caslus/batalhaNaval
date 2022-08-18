@@ -2,7 +2,7 @@
 	var size: number = 4;
 	var remainingShipsToSpawn: number = Math.ceil(size);
 	var remainingShips: number = remainingShipsToSpawn;
-	var remainingPlays = size * 2;
+	var remainingPlays = Math.ceil(size * 2.5);
 
 	type cell = {
 		status: "water" | "ship" | "bomb" | "miss";
@@ -68,7 +68,11 @@
 								play(cell);
 							}}
 						>
-							🚢
+							{#if remainingPlays == 0}
+								🚢
+							{:else}
+								🌊
+							{/if}
 						</a>
 					{:else if cell.status == "bomb"}
 						💥
