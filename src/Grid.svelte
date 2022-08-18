@@ -7,37 +7,24 @@
 		["water", "water", "water", "water"],
 		["water", "water", "water", "water"],
 	];
-
-	function displayCell(cell) {
-		switch (cell) {
-			case "ship":
-				return "🚢";
-			case "water":
-				return "🌊";
-			case "bomb":
-				return "💥";
-			case "miss":
-				return "😭";
-			default:
-				break;
-		}
-	}
-
-	function displayGrid(grid: gridRow[]) {
-		let output = ``;
-		grid.forEach((row) => {
-			output += `<div class="row">`;
-			row.forEach((cell) => {
-				output += `<div class="cell"><a onclick={console.log("wefyfewu  ")}>${displayCell(
-					cell,
-				)}</a></div>`;
-			});
-			output += `</div>`;
-		});
-		return (output += ``);
-	}
 </script>
 
 <div class="grid">
-	{@html displayGrid(myGrid)}
+	{#each myGrid as row}
+		<div class="row">
+			{#each row as cell}
+				<div class="cell">
+					{#if cell == "water"}
+						🌊
+					{:else if cell == "ship"}
+						🚢
+					{:else if cell == "bomb"}
+						💥
+					{:else if cell == "miss"}
+						😭
+					{/if}
+				</div>
+			{/each}
+		</div>
+	{/each}
 </div>
